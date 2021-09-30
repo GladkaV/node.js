@@ -13,7 +13,7 @@ const sortInDir = (dir) => {
             sortFile(dir, nameFile);
         })
     });
-}
+};
 
 sortInDir(DIR_GIRLS);
 sortInDir(DIR_BOYS);

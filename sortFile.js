@@ -29,7 +29,7 @@ const sortFile = (dir, nameFile) => {
             moveFile(DIR_BOYS, pathFile, nameFile);
         }
     });
-}
+};
 
 module.exports = {
     DIR_GIRLS,
