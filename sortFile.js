@@ -5,18 +5,19 @@ const DIR_GIRLS = 'girls';
 const DIR_BOYS = 'boys';
 
 const moveFile = (dir, pathFile, nameFile) => {
-    return fs.rename(`${pathFile}`, path.join(__dirname, `${dir}`, `${nameFile}`), (err) => {
-        console.log(err)
+    fs.rename(pathFile, path.join(__dirname, dir, nameFile), (err) => {
+        if (err) {
+            return console.log(err);
+        }
     })
 }
 
 const sortFile = (dir, nameFile) => {
-    const pathFile = path.join(__dirname, `${dir}`, `${nameFile}`);
+    const pathFile = path.join(__dirname, dir, nameFile);
 
-    return fs.readFile(pathFile, (err, data) => {
+    fs.readFile(pathFile, (err, data) => {
         if (err) {
-            console.log(err);
-            return;
+            return console.log(err);
         }
 
         const user = JSON.parse(data);

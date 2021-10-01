@@ -3,8 +3,10 @@ const path = require('path');
 const {DIR_BOYS, DIR_GIRLS} = require('./sortFile');
 
 const createDir = (nameDir) => {
-    fs.mkdir(`${nameDir}`, {recursive: true}, (err) => {
-        console.log(err);
+    fs.mkdir(nameDir, {recursive: true}, (err) => {
+        if (err) {
+            return console.log(err);
+        }
     });
 }
 
@@ -15,19 +17,21 @@ const createFile = ({name, gender, dir}) => {
     let pathFile = '';
 
     if (dir === 'girls') {
-        pathFile = path.join(__dirname, `${DIR_GIRLS}`, `${name}.json`);
+        pathFile = path.join(__dirname, DIR_GIRLS, `${name}.json`);
     }
 
     if (dir === 'boys') {
-        pathFile = path.join(__dirname, `${DIR_BOYS}`, `${name}.json`);
+        pathFile = path.join(__dirname, DIR_BOYS, `${name}.json`);
     }
 
     const data = {
         name, gender
     };
 
-    return fs.writeFile(pathFile, JSON.stringify(data), (err) => {
-        console.log(err)
+    fs.writeFile(pathFile, JSON.stringify(data), (err) => {
+        if (err) {
+            return console.log(err);
+        }
     });
 };
 

@@ -3,13 +3,12 @@ const path = require('path');
 const {sortFile, DIR_BOYS, DIR_GIRLS} = require('./sortFile');
 
 const sortInDir = (dir) => {
-    return fs.readdir(path.join(__dirname, `${dir}`), (err, data) => {
+    return fs.readdir(path.join(__dirname, dir), (err, data) => {
         if (err) {
-            console.log(err);
-            return;
+            return console.log(err);
         }
 
-        return data.forEach(nameFile => {
+        data.forEach(nameFile => {
             sortFile(dir, nameFile);
         })
     });
