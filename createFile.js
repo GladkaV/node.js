@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const users = require('./users');
 
 const MAN_OLDER = "manOlder20";
 const MAN_YOUNGER = "manYounger20";
@@ -8,7 +9,9 @@ const WOMAN_YOUNGER = "womanYounger20";
 
 const createDir = (nameDir) => {
     fs.mkdir(`${nameDir}`, {recursive: true}, (err) => {
-        console.log(err);
+        if (err) {
+            return console.log(err);
+        }
     });
 }
 
@@ -17,27 +20,29 @@ createDir(MAN_YOUNGER);
 createDir(WOMAN_OLDER);
 createDir(WOMAN_YOUNGER);
 
+const selectDir = (age, gender) => {
+    if (gender === 'male' && age >= 20) {
+        return MAN_OLDER;
+    } else if (gender === 'male' && age < 20) {
+        return MAN_YOUNGER;
+    }
+
+    if (gender === 'female' && age >= 20) {
+        return WOMAN_OLDER;
+    } else if (gender === 'female' && age < 20) {
+        return WOMAN_YOUNGER;
+    }
+}
+
 const createFile = (user) => {
-    let pathFile = '';
+    let pathFile = path.join(__dirname, selectDir(user.age, user.gender), `${user.name}.json`);
 
-    if (user.age >= 20 && user.gender === 'male') {
-        pathFile = path.join(__dirname, `${MAN_OLDER}`, `${user.name}.json`);
-    } else if (user.age < 20 && user.gender === 'male') {
-        pathFile = path.join(__dirname, `${MAN_YOUNGER}`, `${user.name}.json`);
-    }
-
-    if (user.age >= 20 && user.gender === 'female') {
-        pathFile = path.join(__dirname, `${WOMAN_OLDER}`, `${user.name}.json`);
-    } else if (user.age < 20 && user.gender === 'female') {
-        pathFile = path.join(__dirname, `${WOMAN_YOUNGER}`, `${user.name}.json`);
-    }
-
-    return fs.writeFile(pathFile, JSON.stringify(user), (err) => {
-        console.log(err)
+    fs.writeFile(pathFile, JSON.stringify(user), (err) => {
+        if (err) {
+            return console.log(err);
+        }
     });
 };
-
-const users = require('./users');
 
 users.forEach(user => {
     createFile(user);
