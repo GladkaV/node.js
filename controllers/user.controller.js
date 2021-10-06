@@ -5,77 +5,50 @@ const {readFile, writeFile} = require('../helpers/index');
 const pathDB = path.join(__dirname, '..', 'db', 'users.json');
 
 module.exports = {
-    getUsers: (req, res) => {
-        readFile(pathDB)
-            .then(value => res.json(value))
-            .catch(err => {
-                console.log(err);
-                res.json(err);
-            });
+    getUsers: async (req, res) => {
+        const data = JSON.parse(await readFile(pathDB));
+
+        res.json(data);
     },
 
-    createUser: (req, res) => {
-        readFile(pathDB)
-            .then(value => {
-                const maxId = value.sort((a, b) => a.id - b.id)[value.length - 1].id;
-                const id = value.length ? maxId + 1 : 1;
-                const user = {id, ...req.body};
+    createUser: async (req, res) => {
+        const data = JSON.parse(await readFile(pathDB));
+        const maxId = data.sort((a, b) => a.id - b.id)[data.length - 1].id;
+        const id = data.length ? maxId + 1 : 1;
+        const user = {id, ...req.body};
 
-                value.push(user);
+        data.push(user);
+        await writeFile(pathDB, data);
 
-                return writeFile(pathDB, value);
-            })
-            .then(() => res.json('success'))
-            .catch(err => {
-                console.log(err);
-                res.json(err);
-            });
+        res.json(data);
     },
 
-    getUserById: (req, res) => {
+    getUserById: async (req, res) => {
+        const {user_id} = req.params;
+        const data = JSON.parse(await readFile(pathDB));
+
+        res.json(data.find(user => user.id === +user_id));
+    },
+
+    updateUser: async (req, res) => {
+        const data = JSON.parse(await readFile(pathDB));
         const {user_id} = req.params;
 
-        readFile(pathDB)
-            .then(value => {
-                const user = value.find(user => user.id === +user_id);
-                res.json(user);
-            })
-            .catch(err => {
-                console.log(err);
-                res.json(err);
-            });
+        let index = data.findIndex(item => item.id === +user_id);
+        data[index] = {...data[index], ...req.body};
+
+        await writeFile(pathDB, data);
+
+        res.json(data);
     },
 
-    updateUser: (req, res) => {
+    deleteUser: async (req, res) => {
+        const data = JSON.parse(await readFile(pathDB));
         const {user_id} = req.params;
 
-        readFile(pathDB)
-            .then(value => {
-                let index = value.findIndex(item => item.id === +user_id);
-                value[index] = {...value[index], ...req.body};
+        const updateValue = data.filter(user => user.id !== +user_id);
+        await writeFile(pathDB, updateValue);
 
-                return writeFile(pathDB, value);
-            })
-            .then(() => res.json('success'))
-            .catch(err => {
-                console.log(err);
-                res.json(err);
-            });
-    },
-
-    deleteUser: (req, res) => {
-        const {user_id} = req.params;
-
-        readFile(pathDB)
-            .then(value => {
-                const updateValue = value.filter(user => user.id !== +user_id);
-
-                return writeFile(pathDB, updateValue);
-            })
-            .then(() => res.json('success'))
-            .catch(err => {
-                console.log(err);
-                res.json(err);
-            });
+        res.json(updateValue);
     },
 }

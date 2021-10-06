@@ -1,16 +1,8 @@
 const fs = require('fs');
+const util = require('util');
 
-const readFile = (path) => {
-    return new Promise((res, rej) => {
-        fs.readFile(path, (err, data) => {
-            if (err) {
-                return rej(err);
-            }
+const readFilePromise = util.promisify(fs.readFile);
 
-            const users = JSON.parse(data);
-            return res(users);
-        });
-    })
-}
+const readFile = (path) => (readFilePromise(path));
 
 module.exports = readFile;

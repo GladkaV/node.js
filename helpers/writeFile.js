@@ -1,15 +1,8 @@
 const fs = require('fs');
+const util = require('util');
 
-const writeFile = (path, value) => {
-    return new Promise((res, rej) => {
-        fs.writeFile(path, JSON.stringify(value), err => {
-            if (err) {
-                return rej(err);
-            }
+const writeFilePromise = util.promisify(fs.writeFile);
 
-            res();
-        });
-    })
-}
+const writeFile = (path, value) => writeFilePromise(path, JSON.stringify(value));
 
 module.exports = writeFile;
