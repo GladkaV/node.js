@@ -1,8 +1,8 @@
 const path = require('path');
 
-const {readFile, writeFile} = require('../helpers/index');
+const {readFile, writeFile} = require('../helpers');
 
-const pathDB = path.join(__dirname, '..', 'db', 'users.json');
+const pathDB = path.join(process.cwd(), 'db', 'users.json');
 
 module.exports = {
     getUsers: async (req, res) => {
