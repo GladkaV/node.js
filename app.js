@@ -1,17 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+const userRouter = require('./routes/user');
+const {MONGO_CONNECT_URL, PORT} = require('./configs');
+
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/test');
+mongoose.connect(MONGO_CONNECT_URL);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-const userRouter = require('./router/user.router');
-
 app.use('/users', userRouter);
 
-app.listen(5000, () => {
-    console.log('hostname 5000');
+app.listen(PORT, () => {
+    console.log(`hostname ${PORT}`);
 });
