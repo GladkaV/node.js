@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const userRouter = require('./routes/user');
+const authRouter = require('./routes/auth');
 const {MONGO_CONNECT_URL, PORT} = require('./configs');
 
 const app = express();
@@ -11,6 +12,7 @@ mongoose.connect(MONGO_CONNECT_URL);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use('/auth', authRouter);
 app.use('/users', userRouter);
 
 app.listen(PORT, () => {
