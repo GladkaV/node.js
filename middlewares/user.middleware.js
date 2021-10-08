@@ -3,7 +3,9 @@ const User = require('../db/User');
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
         try {
-            const userByEmail = await User.findOne({email: req.body.email});
+            const {email} = req.body;
+
+            const userByEmail = await User.findOne({email});
 
             if (userByEmail) {
                 throw new Error('Email already exist');
@@ -15,29 +17,20 @@ module.exports = {
         }
     },
 
-    authorizationUserMiddleware: async (req, res, next) => {
+    getUserByIdMiddleware: async (req, res, next) => {
         try {
-            const {email, password} = req.body;
-            const user = await User.findOne({email, password});
+            const {user_id} = req.params;
+
+            const user = await User.findById(user_id);
 
             if (!user) {
-                throw new Error('Wrong email or password');
+                throw new Error('Sorry, there is no such user');
             }
 
+            req.user = user;
             next();
         } catch (e) {
             res.json(e.message);
         }
-    },
-
-    getUserByIdMiddleware: (req, res, next) => {
-        const {user_id} = req.params;
-        User.findById(user_id, err => {
-            if (err) {
-                return res.json('Sorry, there is no such user');
-            }
-
-            next();
-        });
-    },
+    }
 };
