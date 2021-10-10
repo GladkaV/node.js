@@ -15,7 +15,7 @@ module.exports = {
             const user = await User.findOne({email});
 
             if (!user) {
-                throw new Error('Please, register!');
+                throw new Error('Wrong email or password');
             }
 
             req.hashPassword = user.password;
