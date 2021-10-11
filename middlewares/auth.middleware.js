@@ -9,7 +9,7 @@ module.exports = {
             const {error} = await authValidator.validate({email, password});
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new Error('Wrong email or password');
             }
 
             const user = await User.findOne({email});
