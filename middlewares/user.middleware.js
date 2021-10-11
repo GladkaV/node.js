@@ -12,9 +12,25 @@ module.exports = {
                 throw new Error('Sorry, there is no such user');
             }
 
-            user = userUtil.userNormalozator(user);
+            user = userUtil.userNormalizator(user);
 
             req.user = user;
+            next();
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
+    createUserBodyValid: async (req, res, next) => {
+        try {
+            const {error, value} = await userValidator.createUserValidator.validate(req.body);
+
+            if (error) {
+                throw new Error(error.details[0].message);
+            }
+
+            req.body = value;
+
             next();
         } catch (e) {
             res.json(e.message);
@@ -36,32 +52,32 @@ module.exports = {
         }
     },
 
-    updateUserMiddleware: async (req, res, next) => {
+    updateUserBodyValid: async (req, res, next) => {
         try {
-            const {user_id} = req.params;
-            const user = userUtil.userNormalozator(req.body);
-
-            const updateUser = await User.updateOne({_id: user_id}).set({...user});
-
-            if (!updateUser) {
-                throw new Error('Sorry, can`t update');
-            }
-
-            next();
-        } catch (e) {
-            res.json(e.message);
-        }
-    },
-
-    isUserBodyValid: async (req, res, next) => {
-        try {
-            const {error, value} = await userValidator.createUserValidator.validate(req.body);
+            const {name} = req.body;
+            const {error, value} = await userValidator.updateUserValidator.validate({name});
 
             if (error) {
                 throw new Error(error.details[0].message);
             }
 
             req.body = value;
+            next();
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
+    updateUserMiddleware: async (req, res, next) => {
+        try {
+            const {user_id} = req.params;
+            const user = userUtil.userNormalizator(req.body);
+
+            const updateUser = await User.updateOne({_id: user_id}, {$set: {...user}});
+
+            if (!updateUser) {
+                throw new Error('Sorry, can`t update');
+            }
 
             next();
         } catch (e) {

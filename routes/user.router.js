@@ -8,7 +8,7 @@ router.get(
     userController.getUsers);
 router.post(
     '/',
-    userMiddleware.isUserBodyValid,
+    userMiddleware.createUserBodyValid,
     userMiddleware.createUserMiddleware,
     userController.createUser);
 
@@ -18,7 +18,7 @@ router.get(
     userController.getUserById);
 router.put(
     '/:user_id',
-    userMiddleware.isUserBodyValid,
+    userMiddleware.updateUserBodyValid,
     userMiddleware.updateUserMiddleware,
     userController.updateUser);
 router.delete(

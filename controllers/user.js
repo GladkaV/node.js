@@ -7,9 +7,7 @@ module.exports = {
         try {
             const users = await User.find().lean();
 
-            for (const key in users) {
-                userUtil.userNormalozator(users[key]);
-            }
+            users.map(user => userUtil.userNormalizator(user));
 
             res.json(users);
         } catch (e) {
@@ -33,6 +31,8 @@ module.exports = {
             const hashedPassword = await passwordService.hash(req.body.password);
 
             const newUser = await User.create({...req.body, password: hashedPassword});
+
+            newUser.password = undefined;
 
             res.json(newUser);
         } catch (e) {

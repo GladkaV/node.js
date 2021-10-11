@@ -5,8 +5,8 @@ const passwordService = require('../services/password.service');
 module.exports = {
     isAuthBodyValid: async (req, res, next) => {
         try {
-            const {email} = req.body;
-            const {error} = await authValidator.validate({email});
+            const {email, password} = req.body;
+            const {error} = await authValidator.validate({email, password});
 
             if (error) {
                 throw new Error(error.details[0].message);
