@@ -1,23 +1,22 @@
-const User = require('../db/User');
-const userValidator = require('../validators/user.validator');
-const userUtil = require('../util/user.util');
+const {ErrorHandler} = require("../errors");
+const {User} = require('../db');
+const {userValidator} = require('../validators');
+const {userUtil} = require('../util');
 
 module.exports = {
     getUserByIdMiddleware: async (req, res, next) => {
         try {
             const {user_id} = req.params;
-            let user = await User.findById(user_id).lean();
+            const user = await User.findById(user_id);
 
             if (!user) {
-                throw new Error('Sorry, there is no such user');
+                throw new ErrorHandler('Sorry, there is no such user', 418);
             }
-
-            user = userUtil.userNormalizator(user);
 
             req.user = user;
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -26,14 +25,14 @@ module.exports = {
             const {error, value} = await userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler(error.details[0].message, 418);
             }
 
             req.body = value;
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -43,12 +42,12 @@ module.exports = {
             const userByEmail = await User.findOne({email});
 
             if (userByEmail) {
-                throw new Error('Email already exist');
+                throw new ErrorHandler('Email already exist', 418);
             }
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -58,13 +57,13 @@ module.exports = {
             const {error, value} = await userValidator.updateUserValidator.validate({name});
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler(error.details[0].message, 418);
             }
 
             req.body = value;
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -76,12 +75,12 @@ module.exports = {
             const updateUser = await User.updateOne({_id: user_id}, {$set: {...user}});
 
             if (!updateUser) {
-                throw new Error('Sorry, can`t update');
+                throw new ErrorHandler('Sorry, can`t update', 418);
             }
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 };

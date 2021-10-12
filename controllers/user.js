@@ -1,19 +1,15 @@
-const User = require('../db/User');
-const passwordService = require('../services/password.service');
-const userUtil = require('../util/user.util');
+const {User} = require('../db');
+const {passwordService} = require('../services');
 
 module.exports = {
     getUsers: async (req, res) => {
         try {
-            const users = await User.find().lean();
-
-            users.map(user => userUtil.userNormalizator(user));
+            const users = await User.find();
 
             res.json(users);
         } catch (e) {
             res.json(e.message);
         }
-
     },
 
     getUserById: (req, res) => {

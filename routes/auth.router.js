@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-const authController = require('../controllers/auth');
-const authMiddleware = require("../middlewares/auth.middleware");
+const {authController} = require('../controllers');
+const {authMiddleware} = require("../middlewares");
 
 router.post(
     '/',
