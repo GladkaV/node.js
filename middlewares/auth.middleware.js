@@ -1,18 +1,16 @@
+const {ErrorHandler, enumStatus, enumMessage} = require("../errors");
 const {User} = require('../db');
 const {authValidator} = require('../validators');
 const {passwordService} = require('../services');
 
 module.exports = {
-    isAuthBodyValid: async (req, res, next) => {
+    isAuthValid: async (req, res, next) => {
         try {
             const {email, password} = req.body;
             const {error} = await authValidator.validate({email, password});
 
             if (error) {
-                return next({
-                    message: 'Wrong email or password',
-                    status: 404,
-                });
+                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
             }
 
             next();
@@ -21,21 +19,18 @@ module.exports = {
         }
     },
 
-    authorizationUserMiddleware: async (req, res, next) => {
+    checkLogin: async (req, res, next) => {
         try {
             const {email, password} = req.body;
             const user = await User.findOne({email}).select('+password');
-            const hashPassword = user.password;
 
             if (!user) {
-                return next({
-                    message: 'Wrong email or password',
-                    status: 404,
-                });
+                throw new ErrorHandler(enumMessage.NOT_FOUND, enumStatus.NOT_FOUND);
             }
 
-            await passwordService.compare(password, hashPassword);
-            user.password = undefined;
+            await passwordService.compare(password, user.password);
+
+            req.body = user;
 
             next();
         } catch (e) {

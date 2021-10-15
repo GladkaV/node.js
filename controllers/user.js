@@ -1,3 +1,5 @@
+const {userUtil} = require("../util");
+const {enumMessage, enumStatus} = require("../errors");
 const {User} = require('../db');
 const {passwordService} = require('../services');
 
@@ -12,9 +14,10 @@ module.exports = {
         }
     },
 
-    getUserById: (req, res) => {
+    getUserById: async (req, res) => {
         try {
-            const {user} = req;
+            const {user_id} = req.params;
+            const user = await User.find({_id: user_id});
 
             res.json(user);
         } catch (e) {
@@ -26,19 +29,22 @@ module.exports = {
         try {
             const hashedPassword = await passwordService.hash(req.body.password);
 
-            const newUser = await User.create({...req.body, password: hashedPassword});
+            let newUser = await User.create({...req.body, password: hashedPassword});
 
-            newUser.password = undefined;
+            newUser = userUtil.userNormalizator(newUser.toObject());
 
-            res.json(newUser);
+            res.status(enumStatus.CREATED).json(newUser);
         } catch (e) {
             res.json(e.message);
         }
     },
 
-    updateUser:  (req, res) => {
+    updateUser:  async (req, res) => {
         try {
-            res.json('Successfully updated');
+            const {user_id} = req.params;
+            await User.updateOne({_id: user_id}, {$set: {name: req.body.name}});
+
+            res.status(enumStatus.CREATED).json(enumMessage.UPDATED);
         } catch (e) {
             res.json(e.message);
         }
@@ -48,9 +54,9 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            const user = await User.deleteOne({_id: user_id});
+            await User.deleteOne({_id: user_id});
 
-            res.json(user);
+            res.sendStatus(enumStatus.NO_CONTENT);
         } catch (e) {
             res.json(e.message);
         }

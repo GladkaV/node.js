@@ -5,8 +5,8 @@ const {authMiddleware} = require("../middlewares");
 
 router.post(
     '/',
-    authMiddleware.isAuthBodyValid,
-    authMiddleware.authorizationUserMiddleware,
+    authMiddleware.isAuthValid,
+    authMiddleware.checkLogin,
     authController.authorizationUser);
 
 module.exports = router;
