@@ -13,8 +13,6 @@ module.exports = {
                 throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
             }
 
-            console.log(4);
-
             next();
         } catch (e) {
             next(e);
