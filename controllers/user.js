@@ -1,5 +1,5 @@
-const {userUtil} = require("../util");
-const {enumMessage, enumStatus} = require("../errors");
+const {userUtil} = require('../util');
+const {enumMessage, enumStatus} = require('../errors');
 const {User} = require('../db');
 const {passwordService} = require('../services');
 

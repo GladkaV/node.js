@@ -21,8 +21,8 @@ router.get(
 router.put(
     '/:user_id',
     userMiddleware.isIdValid,
-    userMiddleware.checkUser,
     userMiddleware.isBodyValid(updateUserValidator),
+    userMiddleware.checkUser,
     userController.updateUser);
 router.delete(
     '/:user_id',

@@ -1,6 +1,6 @@
-const {Types} = require("mongoose");
+const {Types} = require('mongoose');
 
-const {ErrorHandler, enumStatus, enumMessage} = require("../errors");
+const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {User} = require('../db');
 
 module.exports = {

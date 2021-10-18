@@ -1,4 +1,4 @@
-const {enumMessage} = require("../errors");
+const {enumMessage} = require('../errors');
 
 module.exports = {
     authorizationUser: (req, res) => {

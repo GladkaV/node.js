@@ -1,4 +1,4 @@
-const {ErrorHandler, enumStatus, enumMessage} = require("../errors");
+const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {User} = require('../db');
 const {authValidator} = require('../validators');
 const {passwordService} = require('../services');

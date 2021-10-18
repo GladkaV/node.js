@@ -8,6 +8,10 @@ module.exports = {
         ecmaVersion: 12,
     },
     rules: {
+        quotes: [
+            'error',
+            'single'
+        ],
         'array-bracket-newline': [
             'error',
             {minItems: 2}
