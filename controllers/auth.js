@@ -1,4 +1,4 @@
-const {enumMessage, enumStatus} = require('../errors');
+const {enumMessage} = require('../errors');
 const {O_Auth} = require('../db');
 const {jwtService} = require('../services');
 const {userUtil: {userNormalizator}} = require('../util');
@@ -26,11 +26,23 @@ module.exports = {
         }
     },
 
+    removeToken: async (req, res, next) => {
+        try {
+            const {token} = req;
+
+            await O_Auth.remove({refresh_token: token});
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
     logout: async (req, res) => {
         try {
             await O_Auth.deleteOne({access_token: req.token});
 
-            res.json(enumMessage.OK, enumStatus.OK);
+            res.json(enumMessage.OK);
         } catch (e) {
             res.json(e.message);
         }
@@ -42,7 +54,7 @@ module.exports = {
 
             await O_Auth.deleteMany({user_id: user_id.toString()});
 
-            res.json(enumMessage.OK, enumStatus.OK);
+            res.json(enumMessage.OK);
         } catch (e) {
             res.json(e.message);
         }

@@ -1,6 +1,6 @@
 module.exports = {
     OK: 'OK',
-    BAD_REQUEST: 'invalid request',
+    BAD_REQUEST: 'wrong email or password',
     CONFLICT: 'conflict',
     NOT_FOUND: 'not found',
     UPDATED: 'successfully updated',

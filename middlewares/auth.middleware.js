@@ -3,7 +3,7 @@ const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {User, O_Auth} = require('../db');
 const {authValidator} = require('../validators');
 const {passwordService} = require('../services');
-const {AUTHORIZATION, REFRESH} = require('../configs');
+const {AUTHORIZATION, ACCESS} = require('../configs');
 
 module.exports = {
     isAuthValid: async (req, res, next) => {
@@ -27,7 +27,7 @@ module.exports = {
             const user = await User.findOne({email}).select('+password');
 
             if (!user) {
-                throw new ErrorHandler(enumMessage.NOT_FOUND, enumStatus.NOT_FOUND);
+                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
             }
 
             await passwordService.compare(password, user.password);
@@ -40,7 +40,7 @@ module.exports = {
         }
     },
 
-    checkAccessToken: async (req, res, next) => {
+    checkToken: (tokenType) => async (req, res, next) => {
         try {
             const token = req.get(AUTHORIZATION);
 
@@ -48,7 +48,7 @@ module.exports = {
                 throw new ErrorHandler(enumMessage.UNAUTHORIZED, enumStatus.UNAUTHORIZED);
             }
 
-            await jwtService.verifyToken(token);
+            await jwtService.verifyToken(token, tokenType);
 
             req.token = token;
             next();
@@ -57,9 +57,11 @@ module.exports = {
         }
     },
 
-    getTokenResponse: async (req, res, next) => {
+    getTokenResponse: (tokenType) => async (req, res, next) => {
         try {
-            const tokenResponse = await O_Auth.findOne({access_token: req.token}).populate('user_id');
+            const tokenFilter = tokenType === ACCESS ? 'access_token' : 'refresh_token';
+
+            const tokenResponse = await O_Auth.findOne({[tokenFilter]: req.token}).populate('user_id');
 
             if (!tokenResponse) {
                 throw new ErrorHandler(enumMessage.UNAUTHORIZED, enumStatus.UNAUTHORIZED);
@@ -69,33 +71,6 @@ module.exports = {
             next();
         } catch (e) {
             next();
-        }
-    },
-
-    checkRefreshToken: async (req, res, next) => {
-        try {
-            const token = req.get(AUTHORIZATION);
-
-            if (!token) {
-                throw new ErrorHandler(enumMessage.UNAUTHORIZED, enumStatus.UNAUTHORIZED);
-            }
-
-            await jwtService.verifyToken(token, REFRESH);
-
-            const tokenResponse = await O_Auth.findOne({refresh_token: token}).populate('user_id');
-
-            if (!tokenResponse) {
-                throw new ErrorHandler(enumMessage.UNAUTHORIZED, enumStatus.UNAUTHORIZED);
-            }
-
-            await O_Auth.remove({
-                refresh_token: token
-            });
-
-            req.user = tokenResponse.user_id;
-            next();
-        } catch (e) {
-            next(e);
         }
     },
 };

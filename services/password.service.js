@@ -9,7 +9,7 @@ module.exports = {
         const isPasswordMatched = await bcrypt.compare(password, hasPassword);
 
         if (!isPasswordMatched) {
-            throw new ErrorHandler(enumMessage.NOT_FOUND, enumStatus.NOT_FOUND);
+            throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
         }
     }
 };

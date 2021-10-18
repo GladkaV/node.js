@@ -39,7 +39,7 @@ module.exports = {
             const {error, value} = validator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, enumStatus.BAD_REQUEST);
+                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
             }
 
             req.body = value;
@@ -55,7 +55,7 @@ module.exports = {
             const userByEmail = await User.findOne({email});
 
             if (userByEmail) {
-                throw new ErrorHandler(enumMessage.CONFLICT, enumStatus.CONFLICT);
+                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
             }
 
             next();
