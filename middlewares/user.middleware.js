@@ -1,6 +1,6 @@
-const {Types} = require("mongoose");
+const {Types} = require('mongoose');
 
-const {ErrorHandler, enumStatus, enumMessage} = require("../errors");
+const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {User} = require('../db');
 
 module.exports = {
@@ -12,6 +12,8 @@ module.exports = {
             if (!idValid) {
                 throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
             }
+
+            console.log(4);
 
             next();
         } catch (e) {

@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const {userRouter, authRouter} = require('./routes');
 const {MONGO_CONNECT_URL, PORT} = require('./configs');
+const {enumStatus} = require('./errors');
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('*', (err, req, res, next) => {
     res
-        .status(err.status || 500)
+        .status(err.status || enumStatus.SERVER_ERROR)
         .json({
             message: err.message,
         });

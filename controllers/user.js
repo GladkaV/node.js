@@ -1,5 +1,5 @@
-const {userUtil} = require("../util");
-const {enumMessage, enumStatus} = require("../errors");
+const {userUtil} = require('../util');
+const {enumMessage, enumStatus} = require('../errors');
 const {User} = require('../db');
 const {passwordService} = require('../services');
 
@@ -41,8 +41,8 @@ module.exports = {
 
     updateUser:  async (req, res) => {
         try {
-            const {user_id} = req.params;
-            await User.updateOne({_id: user_id}, {$set: {name: req.body.name}});
+            const {_id} = req.user;
+            await User.updateOne({_id: _id.toString()}, {$set: {name: req.body.name}});
 
             res.status(enumStatus.CREATED).json(enumMessage.UPDATED);
         } catch (e) {
@@ -52,9 +52,9 @@ module.exports = {
 
     deleteUser: async (req, res) => {
         try {
-            const {user_id} = req.params;
+            const {_id} = req.user;
 
-            await User.deleteOne({_id: user_id});
+            await User.deleteOne({_id: _id.toString()});
 
             res.sendStatus(enumStatus.NO_CONTENT);
         } catch (e) {
