@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const {authController} = require('../controllers');
 const {authMiddleware} = require('../middlewares');
-const {ACCESS, REFRESH} = require('../configs');
+const {ACCESS, REFRESH, REFRESH_TOKEN} = require('../configs');
 
 router.post(
     '/',
@@ -13,7 +13,7 @@ router.post(
 router.post(
     '/refresh',
     authMiddleware.checkToken(REFRESH),
-    authMiddleware.getTokenResponse(REFRESH),
+    authMiddleware.getTokenResponse(REFRESH_TOKEN),
     authController.removeToken,
     authController.createToken);
 

@@ -3,13 +3,12 @@ const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {User, O_Auth} = require('../db');
 const {authValidator} = require('../validators');
 const {passwordService} = require('../services');
-const {AUTHORIZATION, ACCESS} = require('../configs');
+const {AUTHORIZATION} = require('../configs');
 
 module.exports = {
     isAuthValid: async (req, res, next) => {
         try {
-            const {email, password} = req.body;
-            const {error} = await authValidator.validate({email, password});
+            const {error} = await authValidator.validate(req.body);
 
             if (error) {
                 throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
@@ -57,10 +56,8 @@ module.exports = {
         }
     },
 
-    getTokenResponse: (tokenType) => async (req, res, next) => {
+    getTokenResponse: (tokenFilter) => async (req, res, next) => {
         try {
-            const tokenFilter = tokenType === ACCESS ? 'access_token' : 'refresh_token';
-
             const tokenResponse = await O_Auth.findOne({[tokenFilter]: req.token}).populate('user_id');
 
             if (!tokenResponse) {
