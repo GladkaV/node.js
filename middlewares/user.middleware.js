@@ -39,7 +39,7 @@ module.exports = {
             const {error, value} = validator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
+                throw new ErrorHandler(error.details[0].message, enumStatus.BAD_REQUEST);
             }
 
             req.body = value;
