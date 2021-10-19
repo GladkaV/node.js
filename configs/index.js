@@ -15,4 +15,9 @@ module.exports = {
 
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'email@gmail.com',
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 123456,
+
+    // email-action.enum
+    CREATE: 'create',
+    UPDATE: 'update',
+    DELETE: 'delete',
 };

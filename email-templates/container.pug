@@ -4,8 +4,13 @@ html
         style
             include style.css
     body
-        div
-            block content
+        div.wrap
+            div.header
+                | Social network
 
-        div.footer
-            | Best order
+            div.box
+                block content
+
+            div.footer
+                | You can always contact
+                a(href='https://www.google.com/') technical support
