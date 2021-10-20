@@ -2,3 +2,5 @@ extends container
 block content
     p Hello, #{userName}
     p Your account has been successfully created!
+    p To activate follow
+        a(href=`http://localhost:5000/auth/activate/${token}`) the link

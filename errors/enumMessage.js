@@ -6,5 +6,6 @@ module.exports = {
     UPDATED: 'successfully updated',
     SUCCESS: 'welcome!',
     UNAUTHORIZED: 'not authorized',
+    FORBIDDEN: 'forbidden',
     WRONG_TEMPLATE: 'wrong template name',
 };

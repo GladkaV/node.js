@@ -1,9 +1,9 @@
+const {ACCESS, ACTION, AUTHORIZATION} = require('../configs');
+const {User, O_Auth, Action} = require('../db');
 const {jwtService} = require('../services');
 const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
-const {User, O_Auth} = require('../db');
 const {authValidator} = require('../validators');
 const {passwordService} = require('../services');
-const {AUTHORIZATION} = require('../configs');
 
 module.exports = {
     isAuthValid: async (req, res, next) => {
@@ -68,6 +68,27 @@ module.exports = {
             next();
         } catch (e) {
             next();
+        }
+    },
+
+    checkActivateToken: async (req, res, next) => {
+        try {
+            const {token} = req.params;
+
+            await jwtService.verifyToken(token, ACTION);
+
+            const {user_id: user, _id} = await Action.findOne({token, type: ACTION}).populate('user_id');
+
+            if (!user) {
+                throw new ErrorHandler(enumMessage.UNAUTHORIZED, enumStatus.UNAUTHORIZED);
+            }
+
+            await Action.deleteOne({_id});
+
+            req.user = user;
+            next();
+        } catch (e) {
+            next(e);
         }
     },
 };

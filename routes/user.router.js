@@ -26,6 +26,7 @@ router.put(
     userMiddleware.checkUser,
     authMiddleware.checkToken(ACCESS),
     authMiddleware.getTokenResponse(ACCESS_TOKEN),
+    userMiddleware.isUserActive,
     userController.updateUser);
 router.delete(
     '/:user_id',
@@ -33,6 +34,7 @@ router.delete(
     userMiddleware.checkUser,
     authMiddleware.checkToken(ACCESS),
     authMiddleware.getTokenResponse(ACCESS_TOKEN),
+    userMiddleware.isUserActive,
     userController.deleteUser);
 
 module.exports = router;

@@ -63,4 +63,18 @@ module.exports = {
             next(e);
         }
     },
+
+    isUserActive: (req, res, next) => {
+        try {
+            const {user} = req;
+
+            if (!user.is_active) {
+                throw new ErrorHandler(enumMessage.FORBIDDEN, enumStatus.FORBIDDEN);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 };

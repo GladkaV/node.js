@@ -18,6 +18,11 @@ const userSchema = new Schema({
         trim: true,
         select: false,
     },
+    is_active: {
+        type: Boolean,
+        default: false,
+        required: true,
+    },
 }, {timestamps: true});
 
 module.exports = model('user', userSchema);

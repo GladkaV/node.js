@@ -27,4 +27,9 @@ router.post(
     authMiddleware.checkToken(ACCESS),
     authController.logoutAll);
 
+router.get(
+    '/activate/:token',
+    authMiddleware.checkActivateToken,
+    authController.activate);
+
 module.exports = router;

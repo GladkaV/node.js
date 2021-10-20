@@ -1,7 +1,7 @@
-const {CREATE, UPDATE, DELETE} = require('../configs');
-const {User} = require('../db');
+const {ACTION, CREATE, UPDATE, DELETE} = require('../configs');
+const {Action, User} = require('../db');
 const {enumMessage, enumStatus} = require('../errors');
-const {emailService, passwordService} = require('../services');
+const {emailService, passwordService, jwtService} = require('../services');
 const {userUtil} = require('../util');
 
 module.exports = {
@@ -33,7 +33,10 @@ module.exports = {
 
             let newUser = await User.create({...req.body, password: hashedPassword});
 
-            await emailService.sendMail(req.body.email, CREATE, {userName});
+            const token = jwtService.createActionToken();
+            await Action.create({token, type: ACTION, user_id: newUser._id});
+
+            await emailService.sendMail(req.body.email, CREATE, {userName, token});
 
             newUser = userUtil.userNormalizator(newUser.toObject());
 
