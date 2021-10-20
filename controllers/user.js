@@ -1,5 +1,5 @@
 const {CREATE, UPDATE, DELETE} = require('../configs');
-const {User} = require('../db');
+const {O_Auth, User} = require('../db');
 const {enumMessage, enumStatus} = require('../errors');
 const {emailService, passwordService} = require('../services');
 const {userUtil} = require('../util');
@@ -62,6 +62,8 @@ module.exports = {
             const {_id, name: userName, email} = req.user;
 
             await User.deleteOne({_id: _id.toString()});
+
+            await O_Auth.deleteMany({user_id: _id});
 
             await emailService.sendMail(email, DELETE, {userName});
 
