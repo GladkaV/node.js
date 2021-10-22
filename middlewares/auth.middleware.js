@@ -1,6 +1,6 @@
 const {jwtService} = require('../services');
 const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
-const {User, O_Auth} = require('../db');
+const {User} = require('../db');
 const {authValidator} = require('../validators');
 const {passwordService} = require('../services');
 const {AUTHORIZATION} = require('../configs');
@@ -56,15 +56,16 @@ module.exports = {
         }
     },
 
-    getTokenResponse: (tokenFilter) => async (req, res, next) => {
+    getTokenResponse: (tokenFilter, db) => async (req, res, next) => {
         try {
-            const tokenResponse = await O_Auth.findOne({[tokenFilter]: req.token}).populate('user_id');
+            const tokenResponse = await db.findOne({[tokenFilter]: req.token});
 
             if (!tokenResponse) {
                 throw new ErrorHandler(enumMessage.UNAUTHORIZED, enumStatus.UNAUTHORIZED);
             }
 
             req.user = tokenResponse.user_id;
+            req.token_id = tokenResponse._id;
             next();
         } catch (e) {
             next();

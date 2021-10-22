@@ -7,4 +7,6 @@ module.exports = {
     SUCCESS: 'welcome!',
     UNAUTHORIZED: 'not authorized',
     WRONG_TEMPLATE: 'wrong template name',
+    WRONG_TOKEN_TYPE: 'wrong token type',
+    NO_TOKEN: 'no token',
 };
