@@ -1,4 +1,6 @@
 module.exports = {
+    NODE_ENV: process.env.NODE_ENV || 'dev',
+
     ACCESS: 'access',
     REFRESH: 'refresh',
     FORGOT_PASSWORD: 'forgot_password',
@@ -19,6 +21,8 @@ module.exports = {
 
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'email@gmail.com',
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 123456,
+
+    ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:3000;http://localhost:4200',
 
     // email-action.enum
     CREATE: 'create',

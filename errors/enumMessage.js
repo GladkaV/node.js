@@ -9,4 +9,5 @@ module.exports = {
     WRONG_TEMPLATE: 'wrong template name',
     WRONG_TOKEN_TYPE: 'wrong token type',
     NO_TOKEN: 'no token',
+    NO_CORS: 'CORS is not allowed',
 };
