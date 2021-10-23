@@ -3,6 +3,7 @@ const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {Action, O_Auth, User} = require('../db');
 const {jwtService, emailService, passwordService} = require('../services');
 const {userUtil: {userNormalizator}} = require('../util');
+const {authValidator: {emailValidator}} = require('../validators');
 
 module.exports = {
     createToken: async (req, res) => {
@@ -64,6 +65,11 @@ module.exports = {
     sendMailForgotPassword: async (req, res) => {
         try {
             const {email} = req.body;
+            const {error} = await emailValidator.validate(email);
+
+            if (error) {
+                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
+            }
 
             const user = await User.findOne({email});
 

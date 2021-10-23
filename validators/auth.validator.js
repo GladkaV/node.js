@@ -12,4 +12,14 @@ const authValidator = Joi.object({
         .required(),
 });
 
-module.exports = authValidator;
+const emailValidator = Joi.object({
+    email: Joi.string()
+        .regex(EMAIL_REGEXP)
+        .required()
+        .trim(),
+});
+
+module.exports = {
+    authValidator,
+    emailValidator
+};
