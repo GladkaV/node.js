@@ -1,7 +1,7 @@
 const {jwtService} = require('../services');
 const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {User} = require('../db');
-const {authValidator} = require('../validators');
+const {authValidator: {authValidator}} = require('../validators');
 const {passwordService} = require('../services');
 const {AUTHORIZATION} = require('../configs');
 

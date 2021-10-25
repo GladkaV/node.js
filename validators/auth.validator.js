@@ -12,4 +12,13 @@ const authValidator = Joi.object({
         .required(),
 });
 
-module.exports = authValidator;
+const passwordValidator = Joi.object({
+    password: Joi.string()
+        .regex(PASSWORD_REGEXP)
+        .required(),
+});
+
+module.exports = {
+    authValidator,
+    passwordValidator
+};

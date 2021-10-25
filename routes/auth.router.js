@@ -2,8 +2,9 @@ const router = require('express').Router();
 
 const {authController} = require('../controllers');
 const {O_Auth, Action} = require('../db');
-const {authMiddleware} = require('../middlewares');
-const {ACCESS, REFRESH, REFRESH_TOKEN, FORGOT_PASSWORD, FORGOT_PASSWORD_TOKEN} = require('../configs');
+const {authMiddleware, userMiddleware} = require('../middlewares');
+const {authValidator: {passwordValidator}} = require('../validators');
+const {ACCESS, REFRESH, ACCESS_TOKEN, REFRESH_TOKEN, FORGOT_PASSWORD, FORGOT_PASSWORD_TOKEN} = require('../configs');
 
 router.post(
     '/',
@@ -34,5 +35,14 @@ router.put(
     authMiddleware.checkToken(FORGOT_PASSWORD),
     authMiddleware.getTokenResponse(FORGOT_PASSWORD_TOKEN, Action),
     authController.setNewPasswordAfterForgot);
+
+router.put(
+    '/password/change/:user_id',
+    userMiddleware.isIdValid,
+    userMiddleware.isBodyValid(passwordValidator),
+    userMiddleware.checkUser,
+    authMiddleware.checkToken(ACCESS),
+    authMiddleware.getTokenResponse(ACCESS_TOKEN, O_Auth),
+    authController.changePassword);
 
 module.exports = router;

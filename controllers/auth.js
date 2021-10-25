@@ -1,4 +1,4 @@
-const {FORGOT_PASSWORD, FORGOT_PASSWORD_EMAIL, frontUrl} = require('../configs');
+const {FORGOT_PASSWORD, FORGOT_PASSWORD_EMAIL, frontUrl, UPDATE} = require('../configs');
 const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {Action, O_Auth, User} = require('../db');
 const {jwtService, emailService, passwordService} = require('../services');
@@ -61,6 +61,22 @@ module.exports = {
         }
     },
 
+
+    changePassword: async (req, res) => {
+        try {
+            const {_id, name: userName, email} = req.user;
+            const hashedPassword = await passwordService.hash(req.body.password);
+
+            await User.updateOne({_id: _id.toString()}, {$set: {password: hashedPassword}});
+
+            await emailService.sendMail(email, UPDATE, {userName});
+
+            res.json(enumMessage.OK);
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
     sendMailForgotPassword: async (req, res) => {
         try {
             const {email} = req.body;
@@ -82,7 +98,8 @@ module.exports = {
             await emailService.sendMail(
                 email,
                 FORGOT_PASSWORD_EMAIL,
-                {forgotPasswordUrl: `${frontUrl}/passwordForgot?token=${actionToken}`
+                {
+                    forgotPasswordUrl: `${frontUrl}/passwordForgot?token=${actionToken}`
                 });
 
             res.json(enumMessage.OK);
