@@ -37,7 +37,7 @@ router.put(
     authController.setNewPasswordAfterForgot);
 
 router.put(
-    '/password/change/:user_id',
+    '/password/:user_id',
     userMiddleware.isIdValid,
     userMiddleware.isBodyValid(passwordValidator),
     userMiddleware.checkUser,
