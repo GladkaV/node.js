@@ -1,13 +1,13 @@
 const {CREATE, UPDATE, DELETE} = require('../configs');
 const {O_Auth, User} = require('../db');
 const {enumMessage, enumStatus} = require('../errors');
-const {emailService, passwordService} = require('../services');
+const {emailService, passwordService, userService} = require('../services');
 const {userUtil} = require('../util');
 
 module.exports = {
     getUsers: async (req, res) => {
         try {
-            const users = await User.find();
+            const users = await userService.getAllUsers(req.query);
 
             res.json(users);
         } catch (e) {

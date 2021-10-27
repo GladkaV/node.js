@@ -2,12 +2,16 @@ const Joi = require('joi');
 
 const {EMAIL_REGEXP, PASSWORD_REGEXP} = require('../configs');
 
-const createUserValidator = Joi.object({
+const nameUserValidatir = {
     name: Joi.string()
         .required()
         .min(3)
         .max(30)
         .trim(),
+};
+
+const createUserValidator = Joi.object({
+    ...nameUserValidatir,
     email: Joi.string()
         .regex(EMAIL_REGEXP)
         .required()
@@ -18,11 +22,7 @@ const createUserValidator = Joi.object({
 });
 
 const updateUserValidator = Joi.object({
-    name: Joi.string()
-        .required()
-        .min(3)
-        .max(30)
-        .trim(),
+    ...nameUserValidatir,
 });
 
 module.exports = {

@@ -2,20 +2,22 @@ const Joi = require('joi');
 
 const {EMAIL_REGEXP, PASSWORD_REGEXP} = require('../configs');
 
+const passwordValidatorJoi = {
+    password: Joi.string()
+        .regex(PASSWORD_REGEXP)
+        .required(),
+};
+
 const authValidator = Joi.object({
     email: Joi.string()
         .regex(EMAIL_REGEXP)
         .required()
         .trim(),
-    password: Joi.string()
-        .regex(PASSWORD_REGEXP)
-        .required(),
+    ...passwordValidatorJoi,
 });
 
 const passwordValidator = Joi.object({
-    password: Joi.string()
-        .regex(PASSWORD_REGEXP)
-        .required(),
+    ...passwordValidatorJoi,
 });
 
 module.exports = {

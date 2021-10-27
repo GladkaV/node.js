@@ -18,6 +18,9 @@ const userSchema = new Schema({
         trim: true,
         select: false,
     },
+    age: {
+        type: Number,
+    }
 }, {timestamps: true});
 
 module.exports = model('user', userSchema);
