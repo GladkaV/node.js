@@ -3,7 +3,6 @@ const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {Action, O_Auth, User} = require('../db');
 const {jwtService, emailService, passwordService} = require('../services');
 const {userUtil: {userNormalizator}} = require('../util');
-const {authValidator: {emailValidator}} = require('../validators');
 
 module.exports = {
     createToken: async (req, res) => {
