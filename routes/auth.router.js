@@ -2,12 +2,13 @@ const router = require('express').Router();
 
 const {authController} = require('../controllers');
 const {O_Auth, Action} = require('../db');
-const {authMiddleware} = require('../middlewares');
+const {authMiddleware, userMiddleware} = require('../middlewares');
 const {ACCESS, REFRESH, REFRESH_TOKEN, FORGOT_PASSWORD, FORGOT_PASSWORD_TOKEN} = require('../configs');
+const {authValidator: {emailValidator, authValidator}, userValidator: {forgotPasswordValidator}} = require('../validators');
 
 router.post(
     '/',
-    authMiddleware.isAuthValid,
+    userMiddleware.isBodyValid(authValidator),
     authMiddleware.checkLogin,
     authController.createToken);
 
@@ -28,9 +29,13 @@ router.post(
     authMiddleware.checkToken(ACCESS),
     authController.logoutAll);
 
-router.post('/password/forgot', authController.sendMailForgotPassword);
+router.post(
+    '/password/forgot',
+    userMiddleware.isBodyValid(emailValidator),
+    authController.sendMailForgotPassword);
 router.put(
     '/password/forgot',
+    userMiddleware.isBodyValid(forgotPasswordValidator),
     authMiddleware.checkToken(FORGOT_PASSWORD),
     authMiddleware.getTokenResponse(FORGOT_PASSWORD_TOKEN, Action),
     authController.setNewPasswordAfterForgot);

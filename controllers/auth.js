@@ -65,12 +65,6 @@ module.exports = {
     sendMailForgotPassword: async (req, res) => {
         try {
             const {email} = req.body;
-            const {error} = await emailValidator.validate(email);
-
-            if (error) {
-                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
-            }
-
             const user = await User.findOne({email});
 
             if (!user) {
@@ -101,7 +95,7 @@ module.exports = {
         try {
             await Action.deleteOne({_id: req.token_id});
 
-            const hashedPassword = await passwordService.hash(req.body.newPassword);
+            const hashedPassword = await passwordService.hash(req.body.password);
             const {_id} = req.user;
 
             await User.updateOne({_id: _id.toString()}, {$set: {password: hashedPassword}});

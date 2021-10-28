@@ -1,25 +1,10 @@
 const {jwtService} = require('../services');
 const {ErrorHandler, enumStatus, enumMessage} = require('../errors');
 const {User} = require('../db');
-const {authValidator: {authValidator}} = require('../validators');
 const {passwordService} = require('../services');
 const {AUTHORIZATION} = require('../configs');
 
 module.exports = {
-    isAuthValid: async (req, res, next) => {
-        try {
-            const {error} = await authValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(enumMessage.BAD_REQUEST, enumStatus.BAD_REQUEST);
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
     checkLogin: async (req, res, next) => {
         try {
             const {email, password} = req.body;
