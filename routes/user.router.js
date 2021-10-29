@@ -3,7 +3,7 @@ const router = require('express').Router();
 const {ACCESS, ACCESS_TOKEN} = require('../configs');
 const {userController} = require('../controllers');
 const {O_Auth} = require('../db');
-const {userMiddleware, authMiddleware} = require('../middlewares');
+const {userMiddleware, authMiddleware, fileMiddleware} = require('../middlewares');
 const {userValidator: {createUserValidator, updateUserValidator}} = require('../validators');
 
 router.get(
@@ -20,6 +20,11 @@ router.get(
     userMiddleware.isIdValid,
     userMiddleware.checkUser,
     userController.getUserById);
+router.post(
+    '/avatar/:user_id',
+    userMiddleware.isIdValid,
+    fileMiddleware.checkUserAvatar,
+    userController.createAvatar);
 router.put(
     '/:user_id',
     userMiddleware.isIdValid,

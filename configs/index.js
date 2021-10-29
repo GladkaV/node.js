@@ -24,11 +24,24 @@ module.exports = {
 
     ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:3000;http://localhost:4200',
 
+    AWS_SE_REGION: process.env.AWS_SE_REGION,
+    AWS_S3_NAME: process.env.AWS_S3_NAME,
+    AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
+    AWS_S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY,
+
+    PHOTO_MAX_SIZE: 5 * 1024 * 1024,
+    PHOTOS_MIMETYPES: [
+        'image/gif',
+        'image/jpeg',
+        'image/png',
+    ],
+
     // email-action.enum
     CREATE: 'create',
     UPDATE: 'update',
     DELETE: 'delete',
     FORGOT_PASSWORD_EMAIL: 'forgotPassword',
+    COME_BACK: 'comeBack',
 
     frontUrl: 'http://localhost:3000',
 };

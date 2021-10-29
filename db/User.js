@@ -20,7 +20,10 @@ const userSchema = new Schema({
     },
     age: {
         type: Number,
-    }
+    },
+    avatar: {
+        type: String,
+    },
 }, {timestamps: true});
 
 module.exports = model('user', userSchema);

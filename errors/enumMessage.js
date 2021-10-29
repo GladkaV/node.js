@@ -10,4 +10,6 @@ module.exports = {
     WRONG_TOKEN_TYPE: 'wrong token type',
     NO_TOKEN: 'no token',
     NO_CORS: 'CORS is not allowed',
+    NOT_SUPPORTED_FORMAT: 'Not supported format',
+    BIG_FILE: (name) => `File ${name} is too big`,
 };

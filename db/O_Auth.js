@@ -16,9 +16,9 @@ const OAuthSchema = new Schema({
         required: true,
         ref: 'user',
     },
-}, {timestamps: true,  toObject: {virtuals: true}, toJSON: {virtuals: true}});
+}, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
-OAuthSchema.pre('findOne', function () {
+OAuthSchema.pre('findOne', function() {
     this.populate('user_id');
 });
 

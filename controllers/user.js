@@ -1,7 +1,7 @@
 const {CREATE, UPDATE, DELETE} = require('../configs');
 const {O_Auth, User} = require('../db');
 const {enumMessage, enumStatus} = require('../errors');
-const {emailService, passwordService, userService} = require('../services');
+const {emailService, passwordService, userService, s3Service} = require('../services');
 const {userUtil} = require('../util');
 
 module.exports = {
@@ -36,6 +36,22 @@ module.exports = {
             await emailService.sendMail(req.body.email, CREATE, {userName});
 
             newUser = userUtil.userNormalizator(newUser.toObject());
+
+            res.status(enumStatus.CREATED).json(newUser);
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
+    createAvatar: async (req, res) => {
+        try {
+            let newUser = {};
+
+            if (req.files && req.files.avatar) {
+                const uploadInfo = await s3Service.uploadImage(req.files.avatar, 'users', req.params.user_id.toString());
+
+                newUser = await User.findByIdAndUpdate(req.params.user_id, {avatar: uploadInfo.Location}, {new: true});
+            }
 
             res.status(enumStatus.CREATED).json(newUser);
         } catch (e) {
